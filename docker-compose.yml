@@ -1,0 +1,31 @@
+version: '3'
+services:
+  api:
+    build: .
+    ports:
+      - 8080:5000
+    volumes:
+      - ./api:/src
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    volumes:
+      - ./db:/data/db
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: rootpassword
+  web:
+    image: nginx
+    ports:
+      - 8000:80
+    volumes:
+      - ./site/public:/var/www/html
+      - ./site/site.conf:/etc/nginx/conf.d/site.conf
